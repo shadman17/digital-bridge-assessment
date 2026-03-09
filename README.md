@@ -1,4 +1,4 @@
-# Digital Bridge Assessment — Appointment Sync Service
+# Digital Bridge Assessment
 
 A Django REST API that connects to an external booking system, synchronizes providers/customers/services/appointments into a local PostgreSQL database, and exposes query/reporting endpoints.
 

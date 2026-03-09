@@ -10,12 +10,15 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # Speeds up provider-performance aggregations by matching the filter shape:
-        # booking_system_id + DATE(start_time), then grouping by provider_id.
+        # Speeds up provider-performance aggregations by matching a safe immutable
+        # index key shape: booking_system_id + start_time, then provider_id.
+        #
+        # Note: Using DATE(start_time) in a PostgreSQL index expression can fail for
+        # timestamptz columns because it is not immutable.
         migrations.RunSQL(
             sql=(
                 "CREATE INDEX IF NOT EXISTS appt_sys_date_provider_idx "
-                "ON app_booking_appointment (booking_system_id, (DATE(start_time)), provider_id);"
+                "ON app_booking_appointment (booking_system_id, start_time, provider_id);"
             ),
             reverse_sql="DROP INDEX IF EXISTS appt_sys_date_provider_idx;",
         ),
@@ -24,7 +27,7 @@ class Migration(migrations.Migration):
         migrations.RunSQL(
             sql=(
                 "CREATE INDEX IF NOT EXISTS appt_sys_date_customer_idx "
-                "ON app_booking_appointment (booking_system_id, (DATE(start_time)), customer_id);"
+                "ON app_booking_appointment (booking_system_id, start_time, customer_id);"
             ),
             reverse_sql="DROP INDEX IF EXISTS appt_sys_date_customer_idx;",
         ),
@@ -33,7 +36,7 @@ class Migration(migrations.Migration):
         migrations.RunSQL(
             sql=(
                 "CREATE INDEX IF NOT EXISTS appt_sys_date_service_idx "
-                "ON app_booking_appointment (booking_system_id, (DATE(start_time)), service_id);"
+                "ON app_booking_appointment (booking_system_id, start_time, service_id);"
             ),
             reverse_sql="DROP INDEX IF EXISTS appt_sys_date_service_idx;",
         ),
