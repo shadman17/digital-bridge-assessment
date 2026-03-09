@@ -8,7 +8,7 @@ class BookingSystem(TimeStampedModel):
     class SyncStatus(models.TextChoices):
         PENDING = "pending", "Pending"
         SYNCED = "synced", "Synced"
-        ERROR = "Error", "Error"
+        ERROR = "error", "Error"
 
     name = models.CharField(max_length=255)
     base_url = models.URLField()
@@ -21,6 +21,7 @@ class BookingSystem(TimeStampedModel):
         default=SyncStatus.PENDING,
         db_index=True,
     )
+    last_error = models.TextField(blank=True, default="")
 
     class Meta:
         indexes = [models.Index(fields=["name"])]

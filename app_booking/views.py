@@ -137,3 +137,59 @@ class AppointmentListView(BaseEnvelopeAPIView):
             queryset = queryset.filter(start_time__date__lte=parsed_end)
 
         return self.paginated_response(queryset, AppointmentSerializer, request)
+
+
+class BookingSystemSyncTriggerView(BaseEnvelopeAPIView):
+    def post(self, request, booking_system_id):
+        booking_system = BookingSystem.objects.filter(id=booking_system_id).first()
+        if not booking_system:
+            return Response(
+                {
+                    "data": None,
+                    "errors": [{"message": "Booking system not found."}],
+                    "meta": None,
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        task = sync_booking_system_task.delay(booking_system.id)
+
+        return Response(
+            {
+                "data": {
+                    "booking_system_id": booking_system.id,
+                    "task_id": task.id,
+                    "sync_status": booking_system.sync_status,
+                },
+                "errors": [],
+                "meta": None,
+            },
+            status=status.HTTP_202_ACCEPTED,
+        )
+
+
+class BookingSystemSyncStatusView(BaseEnvelopeAPIView):
+    def get(self, request, booking_system_id):
+        booking_system = BookingSystem.objects.filter(id=booking_system_id).first()
+        if not booking_system:
+            return Response(
+                {
+                    "data": None,
+                    "errors": [{"message": "Booking system not found."}],
+                    "meta": None,
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        return Response(
+            {
+                "data": {
+                    "id": booking_system.id,
+                    "sync_status": booking_system.sync_status,
+                    "last_error": booking_system.last_error,
+                    "last_synced_at": booking_system.last_synced_at,
+                },
+                "errors": [],
+                "meta": None,
+            }
+        )

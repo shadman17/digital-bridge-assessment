@@ -30,7 +30,8 @@ class BookingSystemClient:
         endpoint: str,
         params: dict[str, Any] | None = None,
     ) -> Any:
-        url = f"{self.base_url}/{endpoint.lstrip('/')}"
+        normalized_endpoint = endpoint.strip("/")
+        url = f"{self.base_url}/{normalized_endpoint}/"
         retries = 3
         backoff = 1
 

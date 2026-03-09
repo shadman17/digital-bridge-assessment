@@ -7,6 +7,8 @@ from app_booking.views import (
     CustomerListView,
     ProviderListView,
     ServiceListView,
+    BookingSystemSyncTriggerView,
+    BookingSystemSyncStatusView,
 )
 
 urlpatterns = [
@@ -44,5 +46,15 @@ urlpatterns = [
         "booking-systems/<int:booking_system_id>/appointments/",
         AppointmentListView.as_view(),
         name="appointment-list-legacy",
+    ),
+    path(
+        "booking-systems/<int:booking_system_id>/sync/",
+        BookingSystemSyncTriggerView.as_view(),
+        name="booking-system-sync-trigger",
+    ),
+    path(
+        "booking-systems/<int:booking_system_id>/sync/status/",
+        BookingSystemSyncStatusView.as_view(),
+        name="booking-system-sync-status",
     ),
 ]
