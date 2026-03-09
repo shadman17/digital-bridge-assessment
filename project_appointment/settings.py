@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     # Third-party apps
     "rest_framework",
     "corsheaders",
-    "django_celery_beat",
     # Local apps
     "app_core",
     "app_booking",
