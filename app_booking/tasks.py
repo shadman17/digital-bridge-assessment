@@ -91,10 +91,28 @@ def sync_all_active_booking_systems_task() -> list[dict]:
     )
 
     for booking_system_id in ids:
-        async_result = sync_booking_system_task.delay(booking_system_id)
-        results.append(
-            {"booking_system_id": booking_system_id, "task_id": async_result.id}
-        )
+        try:
+            summary = sync_booking_system_task(booking_system_id)
+            results.append(
+                {
+                    "booking_system_id": booking_system_id,
+                    "status": "synced",
+                    "summary": summary,
+                }
+            )
+        except Exception as exc:
+            logger.exception(
+                "Periodic sync failed for booking_system=%s error=%s",
+                booking_system_id,
+                exc,
+            )
+            results.append(
+                {
+                    "booking_system_id": booking_system_id,
+                    "status": "error",
+                    "error": str(exc),
+                }
+            )
 
     logger.info("Scheduled active booking systems sync: %s", results)
     return results

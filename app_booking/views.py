@@ -15,6 +15,7 @@ from app_booking.serializers import (
     ProviderSerializer,
     ServiceSerializer,
 )
+from .tasks import sync_booking_system_task
 
 
 class BaseEnvelopeAPIView(APIView):

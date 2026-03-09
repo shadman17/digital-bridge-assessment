@@ -1,3 +1,6 @@
+# AI-assisted snippet (ChatGPT) used for initial implementation and structure. Modified and integrated into the project by the author.
+# Modified and integrated into the project by the author
+
 import logging
 from decimal import Decimal, InvalidOperation
 from typing import Any

@@ -1,4 +1,4 @@
-# The script was written originally by the Author. Chatgpt helped to get the paginated response!
+# The script was written originally by the Author. Chatgpt helped to get the paginated response. Also, Chatgpt could not resolved the issue with the periodic task, so I have to change the base_url and test the connection to the booking system locally. The periodic task is now working fine.
 
 import logging
 import time
@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class BookingSystemClient:
     def __init__(
         self,
-        base_url: str = "http://localhost:8888/index.php/api/v1",
+        base_url: str = "http://host.docker.internal:8888/index.php/api/v1",
         username: str = "admin",
         password: str = "admin123",
     ):

@@ -164,6 +164,6 @@ CELERY_TIMEZONE = TIME_ZONE
 CELERY_BEAT_SCHEDULE = {
     "sync-all-active-booking-systems-every-6-hours": {
         "task": "app_booking.tasks.sync_all_active_booking_systems_task",
-        "schedule": 300,
+        "schedule": 6 * 60 * 60,
     },
 }
